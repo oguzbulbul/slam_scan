@@ -114,18 +114,24 @@ trajectory = []
 landmark_positions = []
 
 # Initialize RPLIDAR
-lidar = RPLidar('/dev/ttyUSB0')
+lidar = RPLidar('/denanv/ttyUSB0',baudrate=256000)
+lidar.reset()
+info = lidar.get_info()
+print(info)
 
+health = lidar.get_health()
+print(health)
 # Process LIDAR data and run EKF SLAM
 try:
-    for scan in lidar.iter_scans():
-        # Extract measurements from scan
-        measurements = np.array([[item[2], np.deg2rad(item[1])] for item in scan if item[2] > 0])  # [range, bearing]
-
-        # If there are not enough landmarks, continue
-        if len(measurements) < 2:
-            continue
-
+    measurements = []
+    for i, scan in enumerate(lidar.iter_scans()):
+        for (_, angle, distance) in scan:
+            print("Angle:{:.2f}, distance:{:.2f}".format(angle, distance))
+            measurements = np.array([[distance, angle] for (_, angle, distance) in scan])
+        print('%d: Got %d measurments' % (i, len(scan)))
+        if i > 1_000:
+            lidar.reset()
+            break
         # Landmark coordinates
         landmarks = np.array([[item[2] * np.cos(np.deg2rad(item[1])), item[2] * np.sin(np.deg2rad(item[1]))] for item in scan if item[2] > 0])
 
