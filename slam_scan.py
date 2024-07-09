@@ -114,7 +114,7 @@ trajectory = []
 landmark_positions = []
 
 # Initialize RPLIDAR
-lidar = RPLidar('/denanv/ttyUSB0',baudrate=256000)
+lidar = RPLidar('/dev/ttyUSB0',baudrate=256000)
 lidar.reset()
 info = lidar.get_info()
 print(info)
