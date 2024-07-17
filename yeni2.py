@@ -1,5 +1,6 @@
 import pickle
 import matplotlib.pyplot as plt
+import numpy as np
 
 # Load point cloud from file
 with open('point_cloud.pkl', 'rb') as f:

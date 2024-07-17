@@ -49,6 +49,10 @@ def update_map(scan, pose, map):
 # Main loop
 try:
     for scan in lidar.iter_scans():
+        print(f"Got {len(scan)} samples")
+        for (_, angle, distance) in scan:
+            print(f"Angle: {angle}, distance: {distance / 1000} m")
+            
         # Update SLAM pose
         pose = update_pose(scan, pose)
         # Update map
