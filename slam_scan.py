@@ -118,7 +118,7 @@ lidar = RPLidar('/dev/ttyUSB0',baudrate=256000)
 lidar.reset()
 info = lidar.get_info()
 print(info)
-
+ 
 health = lidar.get_health()
 print(health)
 # Process LIDAR data and run EKF SLAM
@@ -127,6 +127,11 @@ try:
     for i, scan in enumerate(lidar.iter_scans()):
         for (_, angle, distance) in scan:
             print("Angle:{:.2f}, distance:{:.2f}".format(angle, distance))
+            #log the data to a txt file
+            with open('lidar_data.txt', 'a') as f:
+                f.write("{:.2f},{:.2f}\n".format(angle, distance))
+        # Convert LIDAR data to measurements
+        
             measurements = np.array([[distance, angle] for (_, angle, distance) in scan])
         print('%d: Got %d measurments' % (i, len(scan)))
         if i > 1_000:
