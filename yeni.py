@@ -1,7 +1,6 @@
 import time
 import numpy as np
 import math
-import pickle
 from rplidar import RPLidar
 
 # Constants
@@ -49,10 +48,6 @@ def update_map(scan, pose, map):
 # Main loop
 try:
     for scan in lidar.iter_scans():
-        print(f"Got {len(scan)} samples")
-        for (_, angle, distance) in scan:
-            print(f"Angle: {angle}, distance: {distance / 1000} m")
-            
         # Update SLAM pose
         pose = update_pose(scan, pose)
         # Update map
@@ -66,9 +61,10 @@ except KeyboardInterrupt:
     lidar.stop()
     lidar.disconnect()
 
-# Save point cloud to file
-with open('point_cloud.pkl', 'wb') as f:
-    pickle.dump(point_cloud, f)
+# Save point cloud to a txt file
+with open('point_cloud.txt', 'w') as f:
+    for point in point_cloud:
+        f.write(f"{point[0]} {point[1]}\n")
 
 # Clean up
 lidar.stop()

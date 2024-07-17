@@ -1,10 +1,12 @@
-import pickle
-import matplotlib.pyplot as plt
 import numpy as np
+import matplotlib.pyplot as plt
 
-# Load point cloud from file
-with open('point_cloud.pkl', 'rb') as f:
-    point_cloud = pickle.load(f)
+# Load point cloud from txt file
+point_cloud = []
+with open('point_cloud.txt', 'r') as f:
+    for line in f:
+        x, y = map(float, line.strip().split())
+        point_cloud.append((x, y))
 
 # Convert to numpy array for easier handling
 point_cloud = np.array(point_cloud)
